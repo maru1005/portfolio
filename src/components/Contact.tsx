@@ -65,7 +65,7 @@ export default function Contact() {
             className="border p-2 rounded"
           />
           <button type="submit" className="bg-amber-900 text-white p-2 rounded">
-            confirm🐾
+            Confirm🐾
           </button>
         </form>
       )}
@@ -95,7 +95,7 @@ export default function Contact() {
             onClick={() => setStep("form")}
             className="border p-2 rounded"
           >
-            retouch
+            Edit
           </button>
 
           {state.error && <p>Error: {state.error}</p>}
