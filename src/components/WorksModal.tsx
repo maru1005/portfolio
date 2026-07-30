@@ -1,10 +1,7 @@
 // src/components/WorksModal.tsx
 // カードクリック後モーダル表示
 
-type Work = {
-  name: string;
-  color: string;
-};
+import { Work } from "../data/works";
 
 type WorksModalProps = {
   work: Work | null;
@@ -35,6 +32,17 @@ export default function WorksModal({ work, onClose }: WorksModalProps) {
           {work.name}
         </div>
         <p className="text-xl font-bold mb-2">{work.name}</p>
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {work.tech.map((t) => (
+            <span
+              key={t}
+              className="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+        <p className="text-sm text-stone-500 leading-relaxed">{work.desc}</p>
       </div>
     </div>
   );

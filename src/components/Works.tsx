@@ -1,7 +1,8 @@
 // src/components/Works.tsx
-// 表示部
+//
 
 import WorksMarquee from "./WorksMarquee";
+import { works } from "../data/works";
 
 export default function Works() {
   return (
@@ -10,7 +11,7 @@ export default function Works() {
       className="min-h-screen bg-amber-50 flex flex-col items-center justify-center text-4xl font-bold"
     >
       Works
-      <WorksMarquee />
+      <WorksMarquee works={works} />
     </section>
   );
 }

@@ -1,5 +1,5 @@
 // src/components/WorkCatd.tsx
-//  Works　カード部分
+//  Works　カード表示だけ
 
 type WorkCardProps = {
   name: string;

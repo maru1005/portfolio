@@ -3,23 +3,22 @@
 
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import WorkCard from "./WorkCard";
 import WorksModal from "./WorksModal";
+import { Work } from "../data/works";
 
-const works = [
-  { name: "デモトレ", color: "#3a3a3a" },
-  { name: "MeowLingo", color: "#c9c9c9" },
-  { name: "PawType", color: "#C4845A" },
-  { name: "にゃいんスイーパー", color: "#7a8b74" },
-];
+type WorksMarqueeProps = {
+  works: Work[];
+};
 
 const DRAG_THRESHOLD = 6;
 
-export default function WorksMarquee() {
+export default function WorksMarquee({ works }: WorksMarqueeProps) {
   const [selectedWork, setSelectedWork] = useState<
     (typeof works)[number] | null
   >(null);
+  const loopWorks = [...works, ...works, ...works];
   const [isDragging, setIsDragging] = useState(false);
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -29,16 +28,16 @@ export default function WorksMarquee() {
   const dragDistance = useRef(0);
   // マウスを押した瞬間
   const handleMouseDown = (e: React.MouseEvent) => {
-    isDown.current = true;
-    setIsDragging(true);
-    dragDistance.current = 0;
-    startX.current = e.pageX;
-    ScrollStart.current = trackRef.current?.scrollLeft ?? 0;
+    isDown.current = true; // ドラック中
+    setIsDragging(true); // true
+    dragDistance.current = 0; // マウス位置リセット
+    startX.current = e.pageX; // 押した瞬間のマウス座標
+    ScrollStart.current = trackRef.current?.scrollLeft ?? 0; // スクロール位置
   };
   // マウスが動いている間　常時発火
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDown.current || !trackRef.current) return;
-    const dx = e.pageX - startX.current;
+    if (!isDown.current || !trackRef.current) return; // 何もしない　ガード
+    const dx = e.pageX - startX.current; // 押した時と今の座標
     trackRef.current.scrollLeft = ScrollStart.current - dx;
     dragDistance.current = Math.abs(dx);
   };
@@ -53,6 +52,38 @@ export default function WorksMarquee() {
     setSelectedWork(work);
   };
 
+  useEffect(() => {
+    if (!trackRef.current) return;
+
+    const cards = trackRef.current.children;
+    const middleCard = cards[works.length] as HTMLElement;
+
+    trackRef.current.scrollLeft =
+      middleCard.offsetLeft -
+      trackRef.current.clientWidth / 2 +
+      middleCard.clientWidth / 2;
+  }, []);
+
+  useEffect(() => {
+    if (!trackRef.current) return;
+    const track = trackRef.current;
+
+    const handleScroll = () => {
+      const setWidth = track.scrollWidth / 3;
+      if (track.scrollLeft < setWidth * 0.4) {
+        track.scrollLeft += setWidth;
+      } else if (track.scrollLeft > setWidth * 1.6) {
+        track.scrollLeft -= setWidth;
+      }
+    };
+
+    track.addEventListener("scroll", handleScroll);
+
+    return () => {
+      track.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <div
@@ -65,9 +96,9 @@ export default function WorksMarquee() {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
-        {works.map((work) => (
+        {loopWorks.map((work, index) => (
           <div
-            key={work.name}
+            key={`${work.name}-${index}`}
             className="snap-center"
             onClick={() => handleCardClick(work)}
           >
