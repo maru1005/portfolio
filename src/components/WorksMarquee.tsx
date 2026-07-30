@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import WorkCard from "./WorkCard";
 import WorksModal from "./WorksModal";
 import { Work } from "../data/works";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type WorksMarqueeProps = {
   works: Work[];
@@ -84,27 +85,56 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
     };
   }, []);
 
+  const scrollByOneCard = (direction: "left" | "right") => {
+    if (!trackRef.current) return;
+    const card = trackRef.current.children;
+    const first = card[0] as HTMLElement;
+    const second = card[1] as HTMLElement;
+    const step = second.offsetLeft - first.offsetLeft;
+
+    trackRef.current.scrollBy({
+      left: direction === "left" ? -step : step,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
-      <div
-        ref={trackRef}
-        className={`w-full flex overflow-x-auto gap-6 px-[40vw] py-12 cursor-grab active:cursor-grabbing ${
-          isDragging ? "snap-none" : "snap-x snap-proximity"
-        }`}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
-        {loopWorks.map((work, index) => (
-          <div
-            key={`${work.name}-${index}`}
-            className="snap-center"
-            onClick={() => handleCardClick(work)}
-          >
-            <WorkCard name={work.name} color={work.color} />
-          </div>
-        ))}
+      <div className="w-full flex items-center gap-3">
+        <button
+          onClick={() => scrollByOneCard("left")}
+          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
+        >
+          <ChevronLeft size={18} />
+        </button>
+
+        <div
+          ref={trackRef}
+          className={`no-scrollbar flex overflow-x-auto gap-6 px-[40vw] py-12 cursor-grab active:cursor-grabbing ${
+            isDragging ? "snap-none" : "snap-x snap-proximity"
+          }`}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {loopWorks.map((work, index) => (
+            <div
+              key={`${work.name}-${index}`}
+              className="snap-center"
+              onClick={() => handleCardClick(work)}
+            >
+              <WorkCard name={work.name} color={work.color} />
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={() => scrollByOneCard("right")}
+          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
+        >
+          <ChevronRight size={18} />
+        </button>
       </div>
       <WorksModal work={selectedWork} onClose={() => setSelectedWork(null)} />
     </>
