@@ -28,6 +28,7 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
 
   const hasVideo = !!work.video;
   const hasImages = !!work.images && work.images.length > 0;
+  const isPortrait = work.orientation === "portrait";
 
   // イメージ　次
   const handleNext = () => {
@@ -48,56 +49,65 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
       <button
         onClick={onClose}
         aria-label="閉じる"
-        className="absolute top-4 right-4 w-8 h-8 rounded-full bg-stone-50 text-stone-500"
+        className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-stone-500 z-20 flex items-center justify-ceenter"
       >
         ✕
       </button>
 
-      {hasVideo ? (
-        <video
-          src={work.video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full aspect-video rounded-xl mb-4 object-cover"
-        />
-      ) : work.images ? (
-        <div className="relative mb-4">
+      <div
+        className={`relative mb-4 mx-auto overflow-hidden rounded-xl ${
+          hasVideo
+            ? isPortrait
+              ? "h-[60vh] aspect-3/4"
+              : "w-full aspect-video"
+            : "w-full aspect-video"
+        }`}
+      >
+        {hasVideo ? (
+          <video
+            src={work.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          />
+        ) : hasImages ? (
           <Image
-            src={work.images[currentIndex]}
+            src={work.images![currentIndex]}
             alt={work.name}
             width={640}
             height={360}
-            className="w-full aspect-video rounded-xl mb-4 object-cover"
+            className="w-full h-full object-cover"
           />
-          {currentIndex > 0 && (
-            <button
-              onClick={handlePrev}
-              aria-label="前の画像"
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
-            >
-              <ChevronLeft size={18} />
-            </button>
-          )}
-          {currentIndex < work.images!.length - 1 && (
-            <button
-              onClick={handleNext}
-              aria-label="次の画像"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
-            >
-              <ChevronRight size={18} />
-            </button>
-          )}
-        </div>
-      ) : (
-        <div
-          className="w-full aspect-video rounded-xl mb-4 flex items-center justify-center text-white font-semibold"
-          style={{ backgroundColor: work.color }}
-        >
-          {work.name}
-        </div>
-      )}
+        ) : (
+          <div
+            className="w-full h-full flex items-center justify-center text-white font-semibold"
+            style={{ backgroundColor: work.color }}
+          >
+            {work.name}
+          </div>
+        )}
+        {hasImages && currentIndex > 0 && (
+          <button
+            onClick={handlePrev}
+            aria-label="前の画像"
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
+          >
+            <ChevronLeft size={18} />
+          </button>
+        )}
+        {hasImages && currentIndex < work.images!.length - 1 && (
+          <button
+            onClick={handleNext}
+            aria-label="次の画像"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
+          >
+            <ChevronRight size={18} />
+          </button>
+        )}
+      </div>
+
       <p className="text-xl font-bold mb-2">{work.name}</p>
       <div className="flex flex-wrap gap-1.5 mb-3">
         {work.tech.map((t) => (

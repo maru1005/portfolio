@@ -9,6 +9,7 @@ export type Work = {
   image?: string;
   images?: string[];
   video?: string;
+  orientation?: "portrait" | "landscape";
 };
 
 export const works: Work[] = [
@@ -76,8 +77,9 @@ export const works: Work[] = [
       "Tailwind v4",
     ],
     desc: "Go学習を兼ねて作った猫テーマのマインスイーパー。row・col の扱いやゲームロジックの実装を通じて、Goの基礎をしっかり身につけた。",
-    image: "/works/nyain-1.png",
+    image: "/works/nyain-2.png",
     images: [],
     video: "/works/nyain-sweeper-demo.mp4",
+    orientation: "portrait",
   },
 ];
