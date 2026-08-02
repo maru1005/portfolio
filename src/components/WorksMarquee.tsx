@@ -52,6 +52,26 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
     if (dragDistance.current > DRAG_THRESHOLD) return;
     setSelectedWork(work);
   };
+  // タッチ対応
+  const handleTouchStart = (e: React.TouchEvent) => {
+    isDown.current = true;
+    setIsDragging(true);
+    dragDistance.current = 0;
+    startX.current = e.touches[0].pageX;
+    ScrollStart.current = trackRef.current?.scrollLeft ?? 0;
+  };
+  // タッチ動作中
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDown.current || !trackRef.current) return;
+    const dx = e.touches[0].pageX - startX.current;
+    trackRef.current.scrollLeft = ScrollStart.current - dx;
+    dragDistance.current = Math.abs(dx);
+  };
+  // タッチ終了フラグ
+  const handleTouchEnd = () => {
+    isDown.current = false;
+    setIsDragging(false);
+  };
 
   useEffect(() => {
     if (!trackRef.current) return;
@@ -103,6 +123,7 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
       <div className="w-full flex items-center gap-3">
         <button
           onClick={() => scrollByOneCard("left")}
+          aria-label="前の作品"
           className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
         >
           <ChevronLeft size={18} />
@@ -110,13 +131,16 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
 
         <div
           ref={trackRef}
-          className={`no-scrollbar flex overflow-x-auto gap-6 px-[40vw] py-12 cursor-grab active:cursor-grabbing ${
+          className={`no-scrollbar flex overflow-x-auto gap-6 px-[40%] py-12 cursor-grab active:cursor-grabbing ${
             isDragging ? "snap-none" : "snap-x snap-proximity"
           }`}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {loopWorks.map((work, index) => (
             <div
@@ -124,19 +148,28 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
               className="snap-center"
               onClick={() => handleCardClick(work)}
             >
-              <WorkCard name={work.name} color={work.color} />
+              <WorkCard
+                name={work.name}
+                color={work.color}
+                image={work.image}
+              />
             </div>
           ))}
         </div>
 
         <button
           onClick={() => scrollByOneCard("right")}
+          aria-label="次の作品"
           className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
         >
           <ChevronRight size={18} />
         </button>
       </div>
-      <WorksModal work={selectedWork} onClose={() => setSelectedWork(null)} />
+      <WorksModal
+        key={selectedWork?.name}
+        work={selectedWork}
+        onClose={() => setSelectedWork(null)}
+      />
     </>
   );
 }

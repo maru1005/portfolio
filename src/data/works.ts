@@ -1,8 +1,14 @@
+// src/data/works.ts
+// カード内容
+
 export type Work = {
   name: string;
   color: string;
   tech: string[];
   desc: string;
+  image?: string;
+  images?: string[];
+  video?: string;
 };
 
 export const works: Work[] = [
@@ -22,6 +28,8 @@ export const works: Work[] = [
       "CoinGecko API",
     ],
     desc: "個人でLLM・RAGに挑戦したくて開発した仮想通貨デモトレアプリ。バックエンドはGoに初挑戦し、実際の資金を使わない取引練習ツールとして設計。",
+    image: "/works/demo-1.png",
+    images: ["/works/demo-1.png", "/works/demo-2.png", "/works/demo-3.png"],
   },
   {
     name: "MeowLingo",
@@ -38,6 +46,7 @@ export const works: Work[] = [
       "Tailwind v4",
     ],
     desc: "LLM担当としてチーム開発に参加。個人開発でカテゴリ拡張・プロンプト改善・リファクタリングを実施。",
+    images: [],
   },
   {
     name: "PawType",
@@ -53,6 +62,7 @@ export const works: Work[] = [
       "React Hook Form",
     ],
     desc: "Next.jsのおさらいとして開発したエンジニア用語タイピングゲーム。バージョン2では、コードの穴埋め問題を解きながら実装を学べるモードを追加予定。",
+    images: [],
   },
   {
     name: "にゃいんスイーパー",
@@ -66,5 +76,8 @@ export const works: Work[] = [
       "Tailwind v4",
     ],
     desc: "Go学習を兼ねて作った猫テーマのマインスイーパー。row・col の扱いやゲームロジックの実装を通じて、Goの基礎をしっかり身につけた。",
+    image: "/works/nyain-1.png",
+    images: [],
+    video: "/works/nyain-sweeper-demo.mp4",
   },
 ];

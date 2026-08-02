@@ -1,4 +1,4 @@
-// src/components/Works.tsx
+// src/components/Work.tsx
 //
 
 import WorksMarquee from "./WorksMarquee";
@@ -10,8 +10,10 @@ export default function Works() {
       id="works"
       className="min-h-screen bg-amber-50 flex flex-col items-center justify-center text-4xl font-bold"
     >
-      Works
-      <WorksMarquee works={works} />
+      <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
+        Works
+        <WorksMarquee works={works} />
+      </div>
     </section>
   );
 }
