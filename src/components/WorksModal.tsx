@@ -43,13 +43,13 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
 
   return (
     <div
-      className="bg-white rounded-2xl w-[80vw] h-[80vh] overflow-y-auto p-7 relative"
+      className="bg-white rounded-2xl w-[90vw] md:max-w-4xl h-auto max-h-[85vh] overflow-y-auto p-4 md:p-7 relative"
       onClick={(e) => e.stopPropagation()}
     >
       <button
         onClick={onClose}
         aria-label="閉じる"
-        className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-stone-500 z-20 flex items-center justify-ceenter"
+        className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-stone-500 z-20 flex items-center justify-center"
       >
         ✕
       </button>

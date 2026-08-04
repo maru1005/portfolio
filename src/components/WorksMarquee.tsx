@@ -124,7 +124,7 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
         <button
           onClick={() => scrollByOneCard("left")}
           aria-label="前の作品"
-          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
+          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 hidden md:flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
         >
           <ChevronLeft size={18} />
         </button>
@@ -160,7 +160,7 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
         <button
           onClick={() => scrollByOneCard("right")}
           aria-label="次の作品"
-          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
+          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 hidden md:flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
         >
           <ChevronRight size={18} />
         </button>

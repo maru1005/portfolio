@@ -11,7 +11,7 @@ type WorkCardProps = {
 
 export default function WorkCard({ name, color, image }: WorkCardProps) {
   return (
-    <div className="shrink-0 w-80 bg-white border border-stone-200 rounded-2xl p-4 cursor-pointer">
+    <div className="shrink-0 w-[80vw] md:w-120 bg-white border border-stone-200 rounded-2xl p-4 cursor-pointer">
       {image ? (
         <Image
           src={image}
