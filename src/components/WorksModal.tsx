@@ -49,7 +49,7 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
       <button
         onClick={onClose}
         aria-label="閉じる"
-        className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-stone-500 z-20 flex items-center justify-center"
+        className="absolute top-4 right-4 w-8 h-8 rounded-full text-stone-500 z-20 flex items-center justify-center"
       >
         ✕
       </button>
@@ -58,7 +58,7 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
         className={`relative mb-4 mx-auto overflow-hidden rounded-xl ${
           hasVideo
             ? isPortrait
-              ? "h-[60vh] aspect-3/4"
+              ? "w-full max-w-sm aspect-3/4"
               : "w-full aspect-video"
             : "w-full aspect-video"
         }`}
@@ -94,7 +94,7 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
             aria-label="前の画像"
             className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={24} />
           </button>
         )}
         {hasImages && currentIndex < work.images!.length - 1 && (
@@ -103,7 +103,7 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
             aria-label="次の画像"
             className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={24} />
           </button>
         )}
       </div>
@@ -113,7 +113,7 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
         {work.tech.map((t) => (
           <span
             key={t}
-            className="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full"
+            className="text-xs bg-amber-100 text-stone-500 px-2.5 py-1 rounded-full"
           >
             {t}
           </span>
