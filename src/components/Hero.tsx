@@ -11,7 +11,7 @@ export default function Hero() {
         alt="Lulu"
         width={600}
         height={600}
-        className="w-48  h-auto md:w-150"
+        className="w-48  h-auto md:w-150 relative z-10"
       />
       <div className="flex flex-col items-center mt-4 ml-0 md:mt-0 md:ml-0 animate-float">
         <span className="text-lg">{"I'm Lulu"}</span>
