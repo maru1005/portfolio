@@ -9,6 +9,7 @@ import Image from "next/image";
 const STEP_DELAY = 1; // 一歩ごとの時間差(秒)
 const STEPS = 8; // 足跡の数
 const FADE_DURATION = 1.2; // 1個のフェード時間(秒)
+const STEP_DISTANCE = 8; // 1歩の移動量
 
 const DIRECTIONS = [
   { mainAxis: "top", mainSign: 1, rotate: 0 }, //　上から下
@@ -17,36 +18,48 @@ const DIRECTIONS = [
   { mainAxis: "left", mainSign: -1, rotate: 90 }, //　右から左
 ];
 
+function getRandomBase() {
+  const direction = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
+  const maxMove = STEP_DISTANCE * (STEPS - 1);
+  return {
+    top:
+      direction.mainAxis === "top"
+        ? direction.mainSign === 1
+          ? Math.random() * (90 - maxMove) + 10
+          : Math.random() * (90 - maxMove) + maxMove
+        : Math.random() * 50 + 10,
+    left:
+      direction.mainAxis === "left"
+        ? direction.mainSign === 1
+          ? Math.random() * (90 - maxMove) + 10
+          : Math.random() * (90 - maxMove) + maxMove
+        : Math.random() * 50 + 10,
+    direction,
+  };
+}
+
 // random出発地
 export default function PawTrail() {
-  const [base, setBase] = useState(() => ({
-    top: Math.random() * 50 + 10,
-    left: Math.random() * 50 + 10,
-    direction: DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)],
-  }));
+  const [base, setBase] = useState(getRandomBase);
 
   // 歩数　フェードが終わったら出発地の切り替え
   useEffect(() => {
     const totalDuration = (STEPS * STEP_DELAY + FADE_DURATION) * 1000;
     const timeout = setTimeout(() => {
-      setBase({
-        top: Math.random() * 50 + 10,
-        left: Math.random() * 50 + 10,
-        direction: DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)],
-      });
+      setBase(getRandomBase);
     }, totalDuration);
     return () => clearTimeout(timeout);
   }, [base]);
 
-  //　足跡間隔
+  //　足跡　間隔方向
   const footprints = Array.from({ length: STEPS }, (_, i) => ({
     top:
-      base.direction.mainAxis === "top"
-        ? base.top + i * 8 * base.direction.mainSign
+      base.direction.mainAxis === "top" // 縦の時
+        ? base.top + i * STEP_DISTANCE * base.direction.mainSign
         : base.top + (i % 2 === 0 ? 0 : 3),
     left:
-      base.direction.mainAxis === "left"
-        ? base.left + i * 8 * base.direction.mainSign
+      base.direction.mainAxis === "left" // 横の時
+        ? base.left + i * STEP_DISTANCE * base.direction.mainSign
         : base.left + (i % 2 === 0 ? 0 : 3),
     delay: (STEPS - 1 - i) * STEP_DELAY,
   }));
