@@ -15,6 +15,7 @@ export default function Contact() {
     name: "",
     email: "",
     message: "",
+    company: "",
   });
 
   function handleReview(e: React.FormEvent<HTMLFormElement>) {
@@ -24,6 +25,7 @@ export default function Contact() {
       name: data.get("name") as string,
       email: data.get("email") as string,
       message: data.get("message") as string,
+      company: data.get("company") as string,
     });
     setStep("confirm");
   }
@@ -38,8 +40,17 @@ export default function Contact() {
       {step === "form" && !state.success && (
         <form
           onSubmit={handleReview}
-          className="flex flex-col gap-4 w-full max-w-md"
+          className="relative flex flex-col gap-4 w-full max-w-md"
         >
+          {/* honeypot: hidden from real users, bots tend to fill it anyway */}
+          <input
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            className="absolute left-[-9999px] w-px h-px overflow-hidden"
+            aria-hidden="true"
+          />
           <input
             type="text"
             name="name"
@@ -80,6 +91,7 @@ export default function Contact() {
             <input type="hidden" name="name" value={formValues.name} />
             <input type="hidden" name="email" value={formValues.email} />
             <input type="hidden" name="message" value={formValues.message} />
+            <input type="hidden" name="company" value={formValues.company} />
 
             <button
               type="submit"

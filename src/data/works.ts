@@ -10,6 +10,8 @@ export type Work = {
   images?: string[];
   video?: string;
   orientation?: "portrait" | "landscape";
+  github: string;
+  demo?: string;
 };
 
 export const works: Work[] = [
@@ -31,6 +33,7 @@ export const works: Work[] = [
     desc: "個人でLLM・RAGに挑戦したくて開発した仮想通貨デモトレアプリ。バックエンドはGoに初挑戦し、実際の資金を使わない取引練習ツールとして設計。",
     image: "/works/demo-1.png",
     images: ["/works/demo-1.png", "/works/demo-2.png", "/works/demo-3.png"],
+    github: "https://github.com/maru1005/demo-traid-app",
   },
   {
     name: "MeowLingo",
@@ -48,6 +51,7 @@ export const works: Work[] = [
     ],
     desc: "LLM担当としてチーム開発に参加。個人開発でカテゴリ拡張・プロンプト改善・リファクタリングを実施。",
     images: [],
+    github: "https://github.com/maru1005/Meow-Lingo",
   },
   {
     name: "PawType",
@@ -64,6 +68,7 @@ export const works: Work[] = [
     ],
     desc: "Next.jsのおさらいとして開発したエンジニア用語タイピングゲーム。バージョン2では、コードの穴埋め問題を解きながら実装を学べるモードを追加予定。",
     images: [],
+    github: "https://github.com/maru1005/typeforge",
   },
   {
     name: "にゃいんスイーパー",
@@ -81,5 +86,7 @@ export const works: Work[] = [
     images: [],
     video: "/works/nyain-sweeper-demo.mp4",
     orientation: "portrait",
+    github: "https://github.com/maru1005/nyain-sweeper",
+    demo: "https://nyain-sweeper.vercel.app/",
   },
 ];

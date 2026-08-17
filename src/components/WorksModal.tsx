@@ -120,6 +120,27 @@ function ModalContent({ work, onClose }: { work: Work; onClose: () => void }) {
         ))}
       </div>
       <p className="text-sm text-stone-500 leading-relaxed">{work.desc}</p>
+
+      <div className="flex gap-3 mt-4">
+        <a
+          href={work.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-bold bg-amber-100 text-stone-500 px-4 py-2 rounded"
+        >
+          GitHubで見る🐾
+        </a>
+        {work.demo && (
+          <a
+            href={work.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-bold bg-amber-100 text-stone-500 px-4 py-2 rounded"
+          >
+            アプリを見る🐾
+          </a>
+        )}
+      </div>
     </div>
   );
 }
