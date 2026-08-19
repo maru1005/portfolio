@@ -68,6 +68,7 @@ export const works: Work[] = [
     ],
     desc: "Next.jsのおさらいとして開発したエンジニア用語タイピングゲーム。バージョン2では、コードの穴埋め問題を解きながら実装を学べるモードを追加予定。",
     images: [],
+    video: "/works/pawtype-demo.mp4",
     github: "https://github.com/maru1005/typeforge",
   },
   {
