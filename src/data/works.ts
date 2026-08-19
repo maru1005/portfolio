@@ -50,7 +50,8 @@ export const works: Work[] = [
       "Tailwind v4",
     ],
     desc: "LLM担当としてチーム開発に参加。個人開発でカテゴリ拡張・プロンプト改善・リファクタリングを実施。",
-    images: [],
+    image: "/works/meowlingo.png",
+    images: ["/works/meowlingo_collage.png"],
     github: "https://github.com/maru1005/Meow-Lingo",
   },
   {
@@ -67,6 +68,7 @@ export const works: Work[] = [
       "React Hook Form",
     ],
     desc: "Next.jsのおさらいとして開発したエンジニア用語タイピングゲーム。バージョン2では、コードの穴埋め問題を解きながら実装を学べるモードを追加予定。",
+    image: "/works/pawtype.png",
     images: [],
     video: "/works/pawtype-demo.mp4",
     github: "https://github.com/maru1005/typeforge",
