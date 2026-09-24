@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lulu the Cat🐾 Portfolio
 
-## Getting Started
+プログラミングスクール卒業後、個人開発で学習中のエンジニア見習いのポートフォリオサイトです。
+Go・Next.js・LLMを使った作品を紹介しています。
 
-First, run the development server:
+🔗 https://portfolio-eight-zeta-vd2x0oty6q.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 設計方針
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+このサイトで一番見てほしいのはWorksです。
+プログラミング未経験から学習を続けている中で、「何を作り、何を学んだか」を作品を通して伝えたいと考えました。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+そのため、アニメーションで目を引くことよりも、スクロールするだけで自然にWorksへ辿り着ける構成を優先しています。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 1ページ完結の縦スクロール型にし、ナビゲーションで迷わせない
+- アニメーションは控えめにし、Worksまでの流れを妨げない
+- 説明文は最小限にし、詳細はWorksのモーダルで確認できるようにする
 
-## Learn More
+## 使用技術
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js（App Router）
+- TypeScript
+- Tailwind CSS
+- Supabase（Contactフォームの保存先）
+- Vercel（デプロイ）
+- lucide-react（アイコン）
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contactフォームの送信内容をSupabaseに保存するため、サーバー側の処理が書けるNext.jsを採用しました。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 工夫した点
 
-## Deploy on Vercel
+### Worksのマーキー表示
+作品数が4つと少ないため、横方向の無限ループで「もっとありそう」に見せる表示にしました。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- カードを複製し、端に来たら位置をジャンプさせることで無限ループを実現
+- ドラッグ操作とクリック（モーダル表示）の判定を切り分け
+- 自動再生はせず、ユーザー自身の操作で見てもらう形に（PCは＜＞ボタン、スマホはスワイプ）
+- 作品ごとに説明量が違ってもカードサイズが揃うよう、カードはサムネイルとタイトルのみにし、詳細はモーダルに分離
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 肉球の足跡
+当初はHeroの余白を埋めるため、Hero内に肉球を表示する案でした。
+作りながら、猫を飼っている人なら分かる「作業中に邪魔してくる感じ」をサイト全体で表現したいと考え直し、画面上を歩く足跡の演出に変更しました。足跡はあえてコンテンツの前面を歩かせています。
+
+- 画面のランダムな位置から、上下左右いずれかの方向に6歩分歩いて消える
+- 当初は足跡を左右2列で管理していたが、横並びでガニ股に見える違和感があった。6歩を1本の配列にまとめ、偶数・奇数で左右をずらすことで、自然なジグザグの足跡にした
+- 逆方向に歩くと画面外にはみ出す問題は、方向ごとに開始位置の範囲を分けることで解決
+
+## 学んだこと
+
+これまでアプリ開発が中心で、LPのような見せるためのページを作る機会は少なかったため、今回の制作を通してTailwindの使い方を改めて理解しました。
+
+### Tailwindのモバイルファースト
+最初は `md:` がモバイル向けの指定だと勘違いしていました。
+実際には、接頭辞なしのクラスが全画面幅のベースで、`md:` は「その幅以上で上書きする」指定です。
+以降は、画面幅を変えながら「この幅以上ならこう見せたい」を考えて `md:` を足していく形で、細かい調整を繰り返しました。
+
+### 縦長動画のはみ出し
+Worksのモーダルで、縦長の動画だけ横にはみ出す問題がありました。
+高さを基準にサイズを決めていたため、幅が自動計算されて親要素を超えていたのが原因でした。
+横長の動画と同じく、幅を基準に高さを自動計算する考え方に揃えることで解決しました。
+
+### hydrationのズレ
+足跡の初期位置をランダムに計算したところ、サーバーとブラウザで値が変わり、hydrationの警告が出ました。
+Next.jsはサーバーでも一度描画されるため、乱数のように実行するたびに変わる値はズレることを理解しました。
+
+## 今後の課題
+
+- PawType・MeowLingoのスクリーンショット追加
+- スクリーンショットをGIF・動画に差し替え
+- 画像の圧縮による表示速度の改善
+- OGP画像の設定
+- アクセシビリティ対応
