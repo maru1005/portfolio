@@ -18,9 +18,10 @@ Go・Next.js・LLMを使った作品を紹介しています。
 
 ## 使用技術
 
-- Next.js（App Router）
-- TypeScript
-- Tailwind CSS
+- Next.js 16（App Router）
+- React 19
+- TypeScript 5
+- Tailwind CSS v4
 - Supabase（Contactフォームの保存先）
 - Vercel（デプロイ）
 - lucide-react（アイコン）
