@@ -1,158 +1,56 @@
 // src/components/WorksMarquee.tsx
-// カードマーキー
+// カードマーキー(Embla Carusel版)
 
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import WorkCard from "./WorkCard";
 import WorksModal from "./WorksModal";
-import { Work } from "../data/works";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Work } from "@/data/works";
 
 type WorksMarqueeProps = {
   works: Work[];
 };
 
-const DRAG_THRESHOLD = 6;
-
 export default function WorksMarquee({ works }: WorksMarqueeProps) {
-  const [selectedWork, setSelectedWork] = useState<
-    (typeof works)[number] | null
-  >(null);
-  const loopWorks = [...works, ...works, ...works];
-  const [isDragging, setIsDragging] = useState(false);
+  const [selecctedWork, setSelectedWork] = useState<Work | null>(null);
 
-  const trackRef = useRef<HTMLDivElement>(null);
-  const isDown = useRef(false);
-  const startX = useRef(0);
-  const ScrollStart = useRef(0);
-  const dragDistance = useRef(0);
-  // マウスを押した瞬間
-  const handleMouseDown = (e: React.MouseEvent) => {
-    isDown.current = true; // ドラック中
-    setIsDragging(true); // true
-    dragDistance.current = 0; // マウス位置リセット
-    startX.current = e.pageX; // 押した瞬間のマウス座標
-    ScrollStart.current = trackRef.current?.scrollLeft ?? 0; // スクロール位置
-  };
-  // マウスが動いている間　常時発火
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDown.current || !trackRef.current) return; // 何もしない　ガード
-    const dx = e.pageX - startX.current; // 押した時と今の座標
-    trackRef.current.scrollLeft = ScrollStart.current - dx;
-    dragDistance.current = Math.abs(dx);
-  };
-  // ドラッグ終了フラグ
-  const handleMouseUp = () => {
-    isDown.current = false;
-    setIsDragging(false);
-  };
-  // カードがクリックされた時
-  const handleCardClick = (work: (typeof works)[number]) => {
-    if (dragDistance.current > DRAG_THRESHOLD) return;
+  const [emblaRef] = useEmblaCarousel(
+    {
+      loop: true,
+      align: "center",
+    },
+    [
+      Autoplay({
+        delay: 4000,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+      }),
+      WheelGesturesPlugin(),
+    ],
+  );
+
+  const handleCardClick = (work: Work) => {
     setSelectedWork(work);
-  };
-  // タッチ対応
-  const handleTouchStart = (e: React.TouchEvent) => {
-    isDown.current = true;
-    setIsDragging(true);
-    dragDistance.current = 0;
-    startX.current = e.touches[0].pageX;
-    ScrollStart.current = trackRef.current?.scrollLeft ?? 0;
-  };
-  // タッチ動作中
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDown.current || !trackRef.current) return;
-    const dx = e.touches[0].pageX - startX.current;
-    trackRef.current.scrollLeft = ScrollStart.current - dx;
-    dragDistance.current = Math.abs(dx);
-  };
-  // タッチ終了フラグ
-  const handleTouchEnd = () => {
-    isDown.current = false;
-    setIsDragging(false);
-  };
-
-  useEffect(() => {
-    if (!trackRef.current) return;
-
-    const cards = trackRef.current.children;
-    const middleCard = cards[works.length] as HTMLElement;
-
-    trackRef.current.scrollLeft =
-      middleCard.offsetLeft -
-      trackRef.current.clientWidth / 2 +
-      middleCard.clientWidth / 2;
-  }, []);
-
-  useEffect(() => {
-    if (!trackRef.current) return;
-    const track = trackRef.current;
-
-    const handleScroll = () => {
-      const cards = track.children;
-      const first = cards[0] as HTMLElement;
-      const second = cards[1] as HTMLElement;
-      const step = second.offsetLeft - first.offsetLeft;
-      const setWidth = step * works.length;
-
-      if (track.scrollLeft < setWidth * 0.4) {
-        track.scrollLeft += setWidth;
-        ScrollStart.current += setWidth;
-      } else if (track.scrollLeft > setWidth * 1.6) {
-        track.scrollLeft -= setWidth;
-        ScrollStart.current -= setWidth;
-      }
-    };
-
-    track.addEventListener("scroll", handleScroll);
-
-    return () => {
-      track.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  // カードの動き
-  const scrollByOneCard = (direction: "left" | "right") => {
-    if (!trackRef.current) return;
-    const card = trackRef.current.children;
-    const first = card[0] as HTMLElement;
-    const second = card[1] as HTMLElement;
-    const step = second.offsetLeft - first.offsetLeft;
-
-    trackRef.current.scrollBy({
-      left: direction === "left" ? -step : step,
-      behavior: "smooth",
-    });
   };
 
   return (
     <>
-      <div className="w-full flex items-center gap-3">
-        <button
-          onClick={() => scrollByOneCard("left")}
-          aria-label="前の作品"
-          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 hidden md:flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
-        >
-          <ChevronLeft size={18} />
-        </button>
-
-        <div
-          ref={trackRef}
-          className={`no-scrollbar flex overflow-x-auto gap-6 px-[40%] py-12 cursor-grab active:cursor-grabbing ${
-            isDragging ? "snap-none" : "snap-x snap-proximity"
-          }`}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {loopWorks.map((work, index) => (
+      {/*  外枠　はみ出しを隠す */}
+      <div
+        ref={emblaRef}
+        className="w-full overflow-hidden py-12 cursor-grab active:cursor-grabbing"
+      >
+        {/* 横に並ぶ箱  */}
+        <div className="flex -ml-">
+          {/* 各カード  */}
+          {works.map((work) => (
             <div
-              key={`${work.name}-${index}`}
-              className="snap-center"
+              key={work.name}
+              className="shrink-0 pl-6"
               onClick={() => handleCardClick(work)}
             >
               <WorkCard
@@ -163,18 +61,11 @@ export default function WorksMarquee({ works }: WorksMarqueeProps) {
             </div>
           ))}
         </div>
-
-        <button
-          onClick={() => scrollByOneCard("right")}
-          aria-label="次の作品"
-          className="shrink-0 w-10 h-10 rounded-full bg-white border border-stone-200 text-stone-500 hidden md:flex items-center justify-center shadow-sm hover:bg-stone-50 hover:text-stone-700 hover:border-[#C4845A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C4845A]"
-        >
-          <ChevronRight size={18} />
-        </button>
       </div>
+
       <WorksModal
-        key={selectedWork?.name}
-        work={selectedWork}
+        key={selecctedWork?.name}
+        work={selecctedWork}
         onClose={() => setSelectedWork(null)}
       />
     </>
